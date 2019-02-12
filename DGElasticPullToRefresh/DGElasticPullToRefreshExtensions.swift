@@ -126,6 +126,16 @@ public extension UIScrollView {
         pullToRefreshView?.fillColor = color
     }
     
+    // Property for changing SpringWithDamping value of wave animation. Default is `0.43`
+    public func dg_setPullToRefreshSpringWithDamping(_ spring: CGFloat) {
+        pullToRefreshView?.pullSpringWithDamping = spring
+    }
+    
+    // Disable wave to have simple animation behavior. Default is `false`
+    public func dg_setPullToRefreshWave(enable: Bool) {
+        pullToRefreshView?.waveEnable = enable
+    }
+    
     // The default on this is `true`-- which is the original behavior of this Cocoapod. I think that's a bug though. It results in a strange interaction with table views when they have an initial section header.
     public func dg_setPullToRefreshSnapToTopOnInitialAnimatingBounce(snap: Bool = true) {
         pullToRefreshView?.snapToTopOnInitialAnimatingBounce = snap

@@ -59,14 +59,32 @@ open class DGElasticPullToRefreshLoadingViewCircle: DGElasticPullToRefreshLoadin
         return transform
     }()
 
+    public var lineWidth: CGFloat = 1.0 {
+        didSet {
+            shapeLayer.lineWidth = lineWidth
+        }
+    }
+    
+    public var fadeInOnPull: Bool = true
+    
+    fileprivate lazy var rotationAnimation: CABasicAnimation = {
+        let animation = CABasicAnimation(keyPath: "transform.rotation.z")
+        animation.toValue = 2.0 * CGFloat.pi
+        animation.duration = 1.0
+        animation.repeatCount = Float.infinity
+        animation.isRemovedOnCompletion = false
+        animation.fillMode = CAMediaTimingFillMode.forwards
+        return animation
+    }()
+    
     // MARK: -
     // MARK: Constructors
     
     public override init() {
         super.init(frame: .zero)
         
-        shapeLayer.lineWidth = 1.0
-        shapeLayer.fillColor = UIColor.clear.cgColor
+        shapeLayer.lineWidth = self.lineWidth
+        shapeLayer.fillColor = self.backgroundColor?.cgColor
         shapeLayer.strokeColor = tintColor.cgColor
         shapeLayer.actions = ["strokeEnd" : NSNull(), "transform" : NSNull()]
         shapeLayer.anchorPoint = CGPoint(x: 0.5, y: 0.5)
@@ -87,8 +105,12 @@ open class DGElasticPullToRefreshLoadingViewCircle: DGElasticPullToRefreshLoadin
         
         if progress > 1.0 {
             let degrees = ((progress - 1.0) * 200.0)
+            shapeLayer.strokeColor = tintColor.cgColor
             shapeLayer.transform = CATransform3DRotate(identityTransform, degrees.toRadians(), 0.0, 0.0, 1.0)
         } else {
+            if fadeInOnPull {
+                shapeLayer.strokeColor = tintColor.withAlphaComponent(progress).cgColor
+            }
             shapeLayer.transform = identityTransform
         }
     }
@@ -98,12 +120,7 @@ open class DGElasticPullToRefreshLoadingViewCircle: DGElasticPullToRefreshLoadin
         
         if shapeLayer.animation(forKey: kRotationAnimation) != nil { return }
         
-        let rotationAnimation = CABasicAnimation(keyPath: "transform.rotation.z")
-        rotationAnimation.toValue = 2 * CGFloat.pi + currentDegree()
-        rotationAnimation.duration = 1.0
-        rotationAnimation.repeatCount = Float.infinity
-        rotationAnimation.isRemovedOnCompletion = false
-        rotationAnimation.fillMode = CAMediaTimingFillMode.forwards
+        rotationAnimation.toValue = 2.0 * CGFloat.pi + currentDegree()
         shapeLayer.add(rotationAnimation, forKey: kRotationAnimation)
     }
     
@@ -114,7 +131,8 @@ open class DGElasticPullToRefreshLoadingViewCircle: DGElasticPullToRefreshLoadin
     }
     
     fileprivate func currentDegree() -> CGFloat {
-        return shapeLayer.value(forKeyPath: "transform.rotation.z") as! CGFloat
+        let value = shapeLayer.value(forKeyPath: "transform.rotation.z") as? NSNumber
+        return CGFloat(value!.floatValue)
     }
     
     override open func tintColorDidChange() {
@@ -131,7 +149,7 @@ open class DGElasticPullToRefreshLoadingViewCircle: DGElasticPullToRefreshLoadin
         
         shapeLayer.frame = bounds
         
-        let inset = shapeLayer.lineWidth / 2.0
+        let inset = self.lineWidth / 2.0
         shapeLayer.path = UIBezierPath(ovalIn: shapeLayer.bounds.insetBy(dx: inset, dy: inset)).cgPath
     }
     

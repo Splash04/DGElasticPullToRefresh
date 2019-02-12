@@ -119,6 +119,8 @@ open class DGElasticPullToRefreshView: UIView {
     }
     
     var fillColor: UIColor = .clear { didSet { shapeLayer.fillColor = fillColor.cgColor } }
+    public var pullSpringWithDamping: CGFloat = 0.43
+    public var waveEnable: Bool = true
     
     // MARK: Views
     
@@ -246,6 +248,9 @@ open class DGElasticPullToRefreshView: UIView {
     }
     
     fileprivate func currentWaveHeight() -> CGFloat {
+        guard waveEnable else {
+            return 0.0
+        }
         return min(bounds.height / 3.0 * 1.6, DGElasticPullToRefreshConstants.WaveMaxHeight)
     }
     
@@ -334,7 +339,7 @@ open class DGElasticPullToRefreshView: UIView {
         startDisplayLink()
         scrollView.dg_removeObserver(self, forKeyPath: DGElasticPullToRefreshConstants.KeyPaths.ContentOffset)
         scrollView.dg_removeObserver(self, forKeyPath: DGElasticPullToRefreshConstants.KeyPaths.ContentInset)
-        UIView.animate(withDuration: duration, delay: 0.0, usingSpringWithDamping: 0.43, initialSpringVelocity: 0.0, options: [], animations: { [weak self] in
+        UIView.animate(withDuration: duration, delay: 0.0, usingSpringWithDamping: self.pullSpringWithDamping, initialSpringVelocity: 0.0, options: [], animations: { [weak self] in
             self?.cControlPointView.center.y = centerY
             self?.l1ControlPointView.center.y = centerY
             self?.l2ControlPointView.center.y = centerY
