@@ -109,6 +109,7 @@ open class DGElasticPullToRefreshLoadingViewMaterialCircle: DGElasticPullToRefre
     override open func setPullProgress(_ progress: CGFloat) {
         super.setPullProgress(progress)
         
+        shapeLayer.strokeStart = 0.0
         shapeLayer.strokeEnd = min(progress, 1.0)
         if progress > 1.0 {
             shapeLayer.strokeColor = tintColor.cgColor
@@ -132,6 +133,7 @@ open class DGElasticPullToRefreshLoadingViewMaterialCircle: DGElasticPullToRefre
     
     private func startCircleOutAnimation() {
         circleOutAnimation.delegate = self
+        shapeLayer.strokeStart = 1.0
         shapeLayer.add(self.circleOutAnimation, forKey: kCircleOutAnimation)
     }
     
