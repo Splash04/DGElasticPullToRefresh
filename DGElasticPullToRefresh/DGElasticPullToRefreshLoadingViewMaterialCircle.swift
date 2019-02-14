@@ -36,7 +36,8 @@ open class DGElasticPullToRefreshLoadingViewMaterialCircle: DGElasticPullToRefre
         animation.toValue = 1.0
         animation.duration = 1.0
         animation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeIn)
-        
+        animation.repeatCount = Float.infinity
+        animation.fillMode = .forwards
         return animation
     }()
     
@@ -47,7 +48,8 @@ open class DGElasticPullToRefreshLoadingViewMaterialCircle: DGElasticPullToRefre
         animation.toValue = 1.0
         animation.duration = 1.0
         animation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
-        
+        animation.repeatCount = Float.infinity
+        animation.fillMode = .forwards
         return animation
     }()
     
@@ -57,33 +59,22 @@ open class DGElasticPullToRefreshLoadingViewMaterialCircle: DGElasticPullToRefre
         animation.toValue = 1.0
         animation.duration = 1.0
         animation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeIn)
-        
-        return animation
-    }()
-    
-    fileprivate lazy var rotationAnimation: CABasicAnimation = {
-        let animation = CABasicAnimation(keyPath: "transform.rotation.z")
-        animation.fromValue = 0.0
-        animation.toValue = CGFloat(Double.pi * 2.5)
-        animation.duration = 2.0
-        animation.repeatCount = MAXFLOAT
-        
+        animation.fillMode = .backwards
         return animation
     }()
     
     fileprivate lazy var strokeAnimationGroup: CAAnimationGroup = {
         let animationGroup = CAAnimationGroup()
-        animationGroup.duration = 1.0 + self.outAnimation.beginTime
+        animationGroup.duration = 1.5
         animationGroup.repeatCount = Float.infinity
         animationGroup.animations = [self.inAnimation, self.outAnimation]
         animationGroup.isRemovedOnCompletion = false
-        
         return animationGroup
     }()
     
     
     public var fadeInOnPull: Bool = true
-    private var inProgress: Bool = false
+    public private(set) var inProgress: Bool = false
     
     // MARK: -
     // MARK: Constructors
@@ -144,6 +135,7 @@ open class DGElasticPullToRefreshLoadingViewMaterialCircle: DGElasticPullToRefre
     
     private func startStrokeAnimationGroup() {
         strokeAnimationGroup.delegate = self
+        shapeLayer.strokeStart = 0.0
         shapeLayer.add(strokeAnimationGroup, forKey: kStrokeAnimation)
     }
     
@@ -186,7 +178,7 @@ open class DGElasticPullToRefreshLoadingViewMaterialCircle: DGElasticPullToRefre
         super.layoutSubviews()
         
         let center = CGPoint(x: bounds.midX, y: bounds.midY)
-        let radius = min(bounds.width, bounds.height) / 2.0 - shapeLayer.lineWidth / 2.0
+        let radius = min(bounds.width, bounds.height) / 2.0 - shapeLayer.lineWidth / 2.0 - 2.0 // MUI-2421
         
         let arcPath = UIBezierPath(arcCenter: CGPoint.zero,
                                    radius: radius,
