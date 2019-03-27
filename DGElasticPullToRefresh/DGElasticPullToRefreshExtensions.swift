@@ -144,6 +144,14 @@ public extension UIScrollView {
     public func dg_stopLoading() {
         pullToRefreshView?.stopLoading()
     }
+    
+    public func dg_setIgnoreDragging(ignore: Bool) {
+        pullToRefreshView?.ignoreDragging = ignore
+    }
+    
+    public func dg_setMinOffsetToPull(offset: CGFloat) {
+        pullToRefreshView?.minOffsetToPull = offset
+    }
 }
 
 // MARK: -
