@@ -337,7 +337,7 @@ open class DGElasticPullToRefreshView: UIView {
         
         let centerY = DGElasticPullToRefreshConstants.LoadingContentInset
         let duration = 0.9
-        
+        let oldScrollEnabledState = scrollView.isScrollEnabled
         scrollView.isScrollEnabled = false
         startDisplayLink()
         scrollView.dg_removeObserver(self, forKeyPath: DGElasticPullToRefreshConstants.KeyPaths.ContentOffset)
@@ -355,7 +355,7 @@ open class DGElasticPullToRefreshView: UIView {
                 self?.resetScrollViewContentInset(shouldAddObserverWhenFinished: true, animated: false, completion: nil)
                 if let strongSelf = self, let scrollView = strongSelf.scrollView() {
                     scrollView.dg_addObserver(strongSelf, forKeyPath: DGElasticPullToRefreshConstants.KeyPaths.ContentOffset)
-                    scrollView.isScrollEnabled = true
+                    scrollView.isScrollEnabled = oldScrollEnabledState
                 }
                 self?.state = .loading
         })
