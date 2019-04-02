@@ -87,6 +87,8 @@ open class DGElasticPullToRefreshLoadingViewMaterialCircle: DGElasticPullToRefre
         shapeLayer.strokeColor = tintColor.cgColor
         shapeLayer.actions = ["strokeEnd" : NSNull(), "transform" : NSNull()]
         shapeLayer.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        shapeLayer.rasterizationScale = UIScreen.main.scale
+        shapeLayer.contentsScale = UIScreen.main.scale
         layer.addSublayer(shapeLayer)
     }
     

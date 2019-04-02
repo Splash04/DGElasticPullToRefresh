@@ -36,6 +36,8 @@ open class DGElasticPullToRefreshLoadingView: UIView {
         maskLayer.backgroundColor = UIColor.clear.cgColor
         maskLayer.fillColor = UIColor.black.cgColor
         maskLayer.actions = ["path" : NSNull(), "position" : NSNull(), "bounds" : NSNull()]
+        maskLayer.rasterizationScale = UIScreen.main.scale
+        maskLayer.contentsScale = UIScreen.main.scale
         self.layer.mask = maskLayer
         return maskLayer
     }()
