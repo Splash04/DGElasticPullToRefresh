@@ -6,6 +6,7 @@
 //  Copyright © 2015 Danil Gontovnik. All rights reserved.
 //
 
+import DGElasticPullToRefresh
 import UIKit
 
 class ViewController: UIViewController {

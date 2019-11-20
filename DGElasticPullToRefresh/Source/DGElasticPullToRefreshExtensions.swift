@@ -56,19 +56,19 @@ public extension NSObject {
     // MARK: -
     // MARK: Methods
     
-    public func dg_addObserver(_ observer: NSObject, forKeyPath keyPath: String) {
+    func dg_addObserver(_ observer: NSObject, forKeyPath keyPath: String) {
         let observerInfo = [keyPath : observer]
         
-        if dg_observers.index(where: { $0 == observerInfo }) == nil {
+        if dg_observers.firstIndex(where: { $0 == observerInfo }) == nil {
             dg_observers.append(observerInfo)
             addObserver(observer, forKeyPath: keyPath, options: .new, context: nil)
         }
     }
     
-    public func dg_removeObserver(_ observer: NSObject, forKeyPath keyPath: String) {
+    func dg_removeObserver(_ observer: NSObject, forKeyPath keyPath: String) {
         let observerInfo = [keyPath : observer]
         
-        if let index = dg_observers.index(where: { $0 == observerInfo}) {
+        if let index = dg_observers.firstIndex(where: { $0 == observerInfo}) {
             dg_observers.remove(at: index)
             removeObserver(observer, forKeyPath: keyPath)
         }
@@ -99,7 +99,7 @@ public extension UIScrollView {
     
     // MARK: - Methods (Public)
     
-    public func dg_addPullToRefreshWithActionHandler(_ actionHandler: @escaping () -> Void, loadingView: DGElasticPullToRefreshLoadingView?) {
+    func dg_addPullToRefreshWithActionHandler(_ actionHandler: @escaping () -> Void, loadingView: DGElasticPullToRefreshLoadingView?) {
         isMultipleTouchEnabled = false
         panGestureRecognizer.maximumNumberOfTouches = 1
 
@@ -112,44 +112,44 @@ public extension UIScrollView {
         pullToRefreshView.observing = true
     }
     
-    public func dg_removePullToRefresh() {
+    func dg_removePullToRefresh() {
         pullToRefreshView?.disassociateDisplayLink()
         pullToRefreshView?.observing = false
         pullToRefreshView?.removeFromSuperview()
     }
     
-    public func dg_setPullToRefreshBackgroundColor(_ color: UIColor) {
+    func dg_setPullToRefreshBackgroundColor(_ color: UIColor) {
         pullToRefreshView?.backgroundColor = color
     }
     
-    public func dg_setPullToRefreshFillColor(_ color: UIColor) {
+    func dg_setPullToRefreshFillColor(_ color: UIColor) {
         pullToRefreshView?.fillColor = color
     }
     
     // Property for changing SpringWithDamping value of wave animation. Default is `0.43`
-    public func dg_setPullToRefreshSpringWithDamping(_ spring: CGFloat) {
+    func dg_setPullToRefreshSpringWithDamping(_ spring: CGFloat) {
         pullToRefreshView?.pullSpringWithDamping = spring
     }
     
     // Disable wave to have simple animation behavior. Default is `false`
-    public func dg_setPullToRefreshWave(enable: Bool) {
+    func dg_setPullToRefreshWave(enable: Bool) {
         pullToRefreshView?.waveEnable = enable
     }
     
     // The default on this is `true`-- which is the original behavior of this Cocoapod. I think that's a bug though. It results in a strange interaction with table views when they have an initial section header.
-    public func dg_setPullToRefreshSnapToTopOnInitialAnimatingBounce(snap: Bool = true) {
+    func dg_setPullToRefreshSnapToTopOnInitialAnimatingBounce(snap: Bool = true) {
         pullToRefreshView?.snapToTopOnInitialAnimatingBounce = snap
     }
     
-    public func dg_stopLoading() {
+    func dg_stopLoading() {
         pullToRefreshView?.stopLoading()
     }
     
-    public func dg_setIgnoreDragging(ignore: Bool) {
+    func dg_setIgnoreDragging(ignore: Bool) {
         pullToRefreshView?.ignoreDragging = ignore
     }
     
-    public func dg_setMinOffsetToPull(offset: CGFloat) {
+    func dg_setMinOffsetToPull(offset: CGFloat) {
         pullToRefreshView?.minOffsetToPull = offset
     }
 }

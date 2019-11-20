@@ -31,11 +31,11 @@ import UIKit
 
 public extension CGFloat {
     
-    public func toRadians() -> CGFloat {
+    func toRadians() -> CGFloat {
         return (self * CGFloat.pi) / 180.0
     }
     
-    public func toDegrees() -> CGFloat {
+    func toDegrees() -> CGFloat {
         return self * 180.0 / CGFloat.pi
     }
     
