@@ -296,18 +296,17 @@ open class DGElasticPullToRefreshView: UIView {
     fileprivate func resetScrollViewContentInset(shouldAddObserverWhenFinished: Bool, animated: Bool, completion: (() -> ())?) {
         guard let scrollView = scrollView() else { return }
         
-        var contentInset = scrollView.contentInset
-        contentInset.top = originalContentInsetTop
+        var topContentInset = originalContentInsetTop
         
         if state == .animatingBounce {
-            contentInset.top += currentHeight()
+            topContentInset += currentHeight()
         } else if state == .loading {
-            contentInset.top += DGElasticPullToRefreshConstants.LoadingContentInset
+            topContentInset += DGElasticPullToRefreshConstants.LoadingContentInset
         }
         
         scrollView.dg_removeObserver(self, forKeyPath: DGElasticPullToRefreshConstants.KeyPaths.ContentInset)
         
-        let animationBlock = { scrollView.contentInset = contentInset }
+        let animationBlock = { scrollView.contentInset.top = topContentInset }
         let completionBlock = { () -> Void in
             if shouldAddObserverWhenFinished && self.observing {
                 scrollView.dg_addObserver(self, forKeyPath: DGElasticPullToRefreshConstants.KeyPaths.ContentInset)
