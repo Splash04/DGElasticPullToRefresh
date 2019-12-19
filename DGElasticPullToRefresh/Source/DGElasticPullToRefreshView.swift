@@ -198,8 +198,11 @@ open class DGElasticPullToRefreshView: UIView {
             }
         } else if keyPath == DGElasticPullToRefreshConstants.KeyPaths.ContentInset {
             if let newContentInset = change?[NSKeyValueChangeKey.newKey] {
-                let newContentInsetTop = (newContentInset as AnyObject).uiEdgeInsetsValue.top
-                originalContentInsetTop = newContentInsetTop
+                // Prevent `originalContentInsetTop` changes if it was caused during loading animation while we have enlarged top inset.
+                if state != .loading {
+                    let newContentInsetTop = (newContentInset as AnyObject).uiEdgeInsetsValue.top
+                    originalContentInsetTop = newContentInsetTop
+                }
             }
         } else if keyPath == DGElasticPullToRefreshConstants.KeyPaths.Frame {
             layoutSubviews()
